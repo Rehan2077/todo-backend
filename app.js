@@ -1,7 +1,7 @@
 import express from "express";
 import userRouter from "./routes/user.js";
 import taskRouter from "./routes/task.js";
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middlewares/error.js";
 import cors from "cors";
@@ -9,11 +9,18 @@ import cors from "cors";
 export const app = express();
 
 app.set("trust proxy", 1);
-dotenv.config();
-app.use(cors());
+config();
 
+// Using Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL, 'http://localhost:5173'],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 // Using Routes
 app.use("/api/v1/users", userRouter);
