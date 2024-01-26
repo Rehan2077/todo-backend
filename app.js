@@ -8,18 +8,13 @@ import cors from "cors";
 
 export const app = express();
 
+app.set("trust proxy", 1);
 config();
 
 // Using Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors());
 
 // Using Routes
 app.use("/api/v1/users", userRouter);
